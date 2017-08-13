@@ -1,0 +1,14 @@
+# Enter the path to the index.php file here (e.g. http://example.com/chatlog/index.php)
+
+webPath: "http://example.com/chatlog/index.php"
+
+# Enter your MySQL credentials here
+
+MySQL:
+  host: "HOST"
+  username: "USERNAME"
+  password: "PASSWORD"
+  database: "DATABASE"
+
+# Only change this if you really know what you're doing
+  port: "3306"

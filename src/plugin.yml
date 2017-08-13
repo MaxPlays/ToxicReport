@@ -1,0 +1,16 @@
+name: ToxicReport
+version: 1.0.0
+author: MaxPlays
+main: me.MaxPlays.ToxicReport.ToxicReport
+commands:
+  report:
+    usage: /report
+    description: Report player
+  chatlog:
+    usage: /chatlog
+    description: Chatlog
+permissions:
+  ToxicReport.*:
+   description: Everything
+   children:
+     ToxicReport.supporter: true
