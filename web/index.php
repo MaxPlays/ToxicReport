@@ -4,9 +4,9 @@
   include 'config.php';
 
   if(isset($_GET["id"]) && !empty($_GET["id"])){
-    define('id', $_GET["id"]);
+    $id = $_GET["id"];
   }else{
-    define('id', '0');
+      $id = 0;
   }
 
   $sql = new mysqli($mysql_host.":".$mysql_port, $mysql_user, $mysql_password, $mysql_database);
@@ -22,20 +22,19 @@
   $ps->bind_result($name, $content);
 
   if(!$ps->fetch()){
-    $ps->close();
-    $sql->close();
     $name = "Nicht gefunden";
-    $content='[{"time":"", "message":"Der Chatlog konnte nicht gefunden werden"}]'
+    $content='[{"time":"", "message":"Der Chatlog wurde nicht gefunden"}]';
   }
+
+  $decoded = json_decode($content, true);
+
+  for($i = 0; $i < sizeof($decoded); $i++){
+      $msg_array[$decoded[$i]["time"]] = htmlspecialchars($decoded[$i]["message"]);
+  }
+
 
   $ps->close();
-
   $sql->close();
-
-  foreach($content->items as $item){
-    $entry = json_decode($item);
-    $msg_array[$entry->time] = htmlspecialchars($entry->message);
-  }
 
  ?>
 
@@ -64,12 +63,18 @@
             echo '<div class="entry">';
             echo '<span class="name">'.$name.': </span>';
             echo '<span class="message">'.$value.'</span>';
-            echo '<span class="time">['.$key.']</span>';
+
+            if($key != 0){
+              echo '<span class="time">['.(gmdate("H:i", $key + 2*60*60)).']</span>';
+            }else{
+              echo '<span class="time"></span>';
+            }
+
             echo '</div>';
           }
 
          ?>
-         
+
        </div>
      </div>
 

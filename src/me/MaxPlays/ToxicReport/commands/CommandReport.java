@@ -44,12 +44,13 @@ public class CommandReport extends Command {
                                 ResultSet rs = ToxicReport.sql.query("SELECT * FROM reports WHERE reporter='" + p.getUniqueId().toString() + "' ORDER BY time ASC LIMIT 5;");
                                 try {
                                     if(rs.next()){
-                                        ToxicReport.sendMessage(p, "Offene Reports):");
+                                        ToxicReport.sendMessage(p, "Offene Reports:");
                                         do{
-                                            TextComponent tc = new TextComponent(TextComponent.fromLegacyText("§7Spieler: §a" + UUIDFetcher.getName(rs.getString("reported")) + "§8, §7Grund: §e"
-                                                    + ReportType.getById(rs.getInt("reason")).getText() + " "));
+                                            TextComponent tc = new TextComponent(ToxicReport.prefix);
+                                            tc.addExtra(new TextComponent(TextComponent.fromLegacyText("§7Spieler: §a" + UUIDFetcher.getName(rs.getString("reported")) + "§8, §7Grund: §e"
+                                                    + ReportType.getById(rs.getInt("reason")).getText() + " ")));
                                             TextComponent click = new TextComponent("§c[Übernehmen]");
-                                            click.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "report takeover " + rs.getString("id")));
+                                            click.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report takeover " + rs.getString("id")));
                                             tc.addExtra(click);
                                             p.sendMessage(tc);
                                         }while (rs.next());

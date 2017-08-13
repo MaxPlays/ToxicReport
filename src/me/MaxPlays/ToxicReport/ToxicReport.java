@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class ToxicReport extends Plugin{
 
     private static Configuration config;
-    public static SQL sql, sqlite;
+    public static SQL sql;
     public static BaseComponent[] prefix = TextComponent.fromLegacyText("§2Report §8» §7");
     public static final long reportTimeout = 60*1000;
     public static ToxicReport instance;
@@ -34,7 +34,7 @@ public class ToxicReport extends Plugin{
         new ConfigLoader().load(getDataFolder());
         new SQLoader().load();
 
-        webdir = getConfig().getString("webDir");
+        webdir = getConfig().getString("webPath");
 
         runDeleteScheduler();
 
@@ -48,7 +48,6 @@ public class ToxicReport extends Plugin{
 
     public void onDisable(){
         sql.disconnect();
-        sqlite.disconnect();
     }
 
     public static Configuration getConfig() {
@@ -61,14 +60,14 @@ public class ToxicReport extends Plugin{
 
     public static void sendMessage(ProxiedPlayer p, String msg){
         TextComponent tc = new TextComponent(prefix);
-        tc.addExtra(new TextComponent(TextComponent.fromLegacyText(msg)));
+        tc.addExtra(new TextComponent(TextComponent.fromLegacyText("§7" + msg)));
         p.sendMessage(tc);
     }
 
     private void runDeleteScheduler() {
         BungeeCord.getInstance().getScheduler().schedule(this, new Runnable() {
             @Override
-            public void run() { sqlite.update("DELETE FROM chatlog WHERE (time + " + (10*60*1000) + ") < " + System.currentTimeMillis() + ";"); }
+            public void run() { sql.update("DELETE FROM chatlog WHERE (time + " + (10*60*1000) + ") < " + System.currentTimeMillis() + ";"); }
         }, 0, 30, TimeUnit.SECONDS);
     }
 }

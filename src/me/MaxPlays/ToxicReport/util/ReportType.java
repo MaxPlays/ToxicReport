@@ -38,9 +38,9 @@ public enum ReportType {
         for(ReportType t: ReportType.values()){
             TextComponent cp = new TextComponent(TextComponent.fromLegacyText("§8» §2ID: §a" + t.getId() + "§8; §2Grund: §a" + t.getText()));
             if(arg1 == null)
-                cp.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "report <Spieler>"));
+                cp.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/report <Spieler>"));
             else
-                cp.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "report " + arg1 + " " + t.getId()));
+                cp.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + arg1 + " " + t.getId()));
             p.sendMessage(cp);
         }
         p.sendMessage(new TextComponent("§8»"));

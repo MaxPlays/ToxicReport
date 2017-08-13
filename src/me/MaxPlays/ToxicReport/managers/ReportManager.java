@@ -1,7 +1,6 @@
 package me.MaxPlays.ToxicReport.managers;
 
 import me.MaxPlays.ToxicReport.ToxicReport;
-import me.MaxPlays.ToxicReport.io.SQL;
 import me.MaxPlays.ToxicReport.util.IDGenerator;
 import me.MaxPlays.ToxicReport.util.ReportType;
 import me.MaxPlays.ToxicReport.util.TimeParser;
@@ -22,10 +21,10 @@ import java.util.UUID;
  */
 public class ReportManager {
 
-    private static HashMap<ProxiedPlayer, Long> timeouts = new HashMap<>();
+    private static HashMap<String, Long> timeouts = new HashMap<>();
 
     public static void report(String player, ProxiedPlayer reporter, int reason){
-        if(canReport(reporter)){
+        if(canReport(reporter.getName())){
             if(BungeeCord.getInstance().getPlayer(player) != null){
                 ReportType type = ReportType.getById(reason);
                 if(type != null){
@@ -51,14 +50,18 @@ public class ReportManager {
 
                         for(ProxiedPlayer pl: BungeeCord.getInstance().getPlayers()){
                             if(pl.hasPermission("ToxicReport.supporter")){
-                                ToxicReport.sendMessage(pl, "§4" + BungeeCord.getInstance().getPlayer(player).getName() + " §7wurde wegen §c" + type.getText() + " §7von §8" + reporter.getName() + " §7reportet.");
+                                ToxicReport.sendMessage(pl, "§4" + BungeeCord.getInstance().getPlayer(player).getName() + " §7wurde wegen §c" + type.getText() + " §7von §8" + reporter.getName() + " §7reportet. ");
                                 TextComponent tc = new TextComponent(ToxicReport.prefix);
                                 TextComponent click = new TextComponent(TextComponent.fromLegacyText("§a[Report übernehmen]"));
-                                click.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "report takeover " + reportID));
+                                click.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report takeover " + reportID));
+                                tc.addExtra(click);
+                                pl.sendMessage(tc);
 
                                 online++;
                             }
                         }
+
+                        timeout(reporter.getName());
 
                         ToxicReport.sendMessage(reporter, "Vielen Dank für deinen Report des Spielers §c" + player + "§8! §7" +
                                 (online > 0 ? "Es wird sich in Kürze eines der Teammitglieder, die online sind, §8(§2" + online + "§8) §7um die Angelegenheit kümmern." : "Es sind im Moment leider §ckeine §7Teammitglieder online. Es wird sich trotzdem so schnell wie möglich um deinen Report gekümmert.") +
@@ -74,7 +77,7 @@ public class ReportManager {
                 ToxicReport.sendMessage(reporter, "Der Spieler §c" + player + " §7ist nicht online");
             }
         }else{
-            ToxicReport.sendMessage(reporter, "Bitte warte noch §c" + new TimeParser((timeouts.get(reporter) - System.currentTimeMillis())/1000) + "§7, bevor du wieder einen Spieler meldest");
+            ToxicReport.sendMessage(reporter, "Bitte warte noch §c" + new TimeParser((timeouts.get(reporter.getName()) - System.currentTimeMillis())/1000).parse() + "§7, bevor du wieder einen Spieler meldest");
         }
     }
 
@@ -90,7 +93,7 @@ public class ReportManager {
                             ReportType type = ReportType.getById(rs.getInt("reason"));
                             String id = rs.getString("id");
                             ToxicReport.sendMessage(p, "Chatlog:§c " + rs.getString("url"));
-                            if(type.getId() != 1){
+                            if(type.getId() != 2){
                                 if(reported != null){
                                     p.connect(reported.getServer().getInfo());
                                     ToxicReport.sendMessage(p, "Du wurdest mit dem Server des reporteten Spielers §4§l" + reported.getName() + " §7verbunden");
@@ -114,12 +117,12 @@ public class ReportManager {
     }
 
 
-    private static boolean canReport(ProxiedPlayer p){
+    private static boolean canReport(String p){
         if(timeouts.containsKey(p) && timeouts.get(p) > System.currentTimeMillis())
             return false;
         return true;
     }
-    private static void timeout(ProxiedPlayer p){
+    private static void timeout(String p){
         if(timeouts.containsKey(p))
             timeouts.remove(p);
         timeouts.put(p, System.currentTimeMillis() + ToxicReport.reportTimeout);

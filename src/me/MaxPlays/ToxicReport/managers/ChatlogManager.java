@@ -1,7 +1,6 @@
 package me.MaxPlays.ToxicReport.managers;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.MaxPlays.ToxicReport.ToxicReport;
 import me.MaxPlays.ToxicReport.util.IDGenerator;
@@ -27,14 +26,14 @@ public class ChatlogManager {
             @Override
             public void run() {
 
-                ResultSet rs = ToxicReport.sqlite.query("SELECT * FROM chatlog WHERE name='" + p.getName() + "' ORDER BY TIME DESC;");
+                ResultSet rs = ToxicReport.sql.query("SELECT * FROM chatlog WHERE name='" + p.getName() + "' ORDER BY time DESC;");
 
                 JsonArray array = new JsonArray();
 
                 try {
                     while(rs.next()){
                         JsonObject o = new JsonObject();
-                        o.addProperty("time", new SimpleDateFormat("HH:mm").format(new Date(rs.getLong("time"))));
+                        o.addProperty("time", rs.getLong("time"));
                         o.addProperty("message", rs.getString("message"));
                         array.add(o);
                     }
@@ -42,7 +41,7 @@ public class ChatlogManager {
                     PreparedStatement ps = ToxicReport.sql.getCon().prepareStatement("INSERT INTO chatlogs VALUES(?, ?, ?)");
                     ps.setString(1, id);
                     ps.setString(2, p.getName());
-                    ps.setString(3, array.getAsString());
+                    ps.setString(3, array.toString());
                     ps.executeUpdate();
 
                 } catch (SQLException e) {

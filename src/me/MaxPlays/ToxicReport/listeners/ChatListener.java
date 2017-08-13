@@ -19,7 +19,7 @@ public class ChatListener implements Listener {
     public void onChat(ChatEvent e){
         if(e.getSender() instanceof ProxiedPlayer){
             ProxiedPlayer p = (ProxiedPlayer) e.getSender();
-            Connection con = ToxicReport.sqlite.getCon();
+            Connection con = ToxicReport.sql.getCon();
             try {
                 PreparedStatement ps = con.prepareStatement("INSERT INTO chatlog VALUES(?, ?, ?);");
                 ps.setString(1, p.getName());

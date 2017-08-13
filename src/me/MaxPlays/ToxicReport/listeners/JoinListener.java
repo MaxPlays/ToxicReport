@@ -23,14 +23,15 @@ public class JoinListener implements Listener {
                 @Override
                 public void run() {
                     ResultSet rs = ToxicReport.sql.query("SELECT COUNT(*) AS total FROM reports;");
-                    String count = "§2keine";
+                    int count = 0;
                     try {
                         if(rs.next())
-                            count = String.valueOf("§4" + rs.getInt("total"));
+                            count = rs.getInt("total");
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                     }
-                    ToxicReport.sendMessage(p, "Es sind im Moment " + count + " §7Reports offen. Benutze §c/report list §7 um eine Liste aller offenen Reports zu sehen");
+                    if(count > 0)
+                        ToxicReport.sendMessage(p, "Es sind im Moment §4" + count + " §7Reports offen. Benutze §c/report list §7 um eine Liste aller offenen Reports zu sehen");
                 }
             });
         }

@@ -3,7 +3,6 @@ package me.MaxPlays.ToxicReport.util;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
@@ -35,7 +34,7 @@ public class UUIDFetcher {
             InputStreamReader isr = new InputStreamReader(conn.getInputStream());
             BufferedReader br = new BufferedReader(isr);
             String line = br.readLine();
-            JsonArray array = (((JsonObject) new JsonParser().parse(line)).getAsJsonArray());
+            JsonArray array = (new JsonParser().parse(line).getAsJsonArray());
             String name = array.get(array.size() - 1).getAsJsonObject().get("name").getAsString();
             cache.put(uuid, name);
             return name;

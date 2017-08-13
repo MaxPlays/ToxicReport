@@ -30,16 +30,16 @@ public class TimeParser {
         }
 
         if(days > 0){
-            s.append(days + (days > 1 ? " days " : " day "));
+            s.append(days + (days > 1 ? " Tage " : " Tag "));
         }
         if(hours > 0){
-            s.append(hours + (hours > 1 ? " hours " : " hour "));
+            s.append(hours + (hours > 1 ? " Stunden " : " Stunde "));
         }
         if(minutes > 0){
-            s.append(minutes + (minutes > 1 ? " minutes " : " minute "));
+            s.append(minutes + (minutes > 1 ? " Minuten " : " Minute "));
         }
         if(seconds > 0){
-            s.append(seconds + (seconds > 1 ? " seconds" : " second"));
+            s.append(seconds + (seconds > 1 ? " Sekunden" : " Sekunde"));
         }else if(days == 0 && hours == 0 && minutes == 0){
             s.append("0 seconds");
         }
