@@ -16,8 +16,8 @@ public class SQLoader {
 
         ToxicReport.sql = new SQL(host, database, username, password, port, ToxicReport.instance);
         ToxicReport.sql.connect();
-        ToxicReport.sql.update("CREATE TABLE IF NOT EXISTS reports(id VARCHAR(64), time LONG, reported VARCHAR(64), reporter VARCHAR(64), reason INT, url TEXT);");
-        ToxicReport.sql.update("CREATE TABLE IF NOT EXISTS chatlogs(id VARCHAR(64), name VARCHAR(64), content TEXT);");
+        ToxicReport.sql.update("CREATE TABLE IF NOT EXISTS reports(id VARCHAR(64) PRIMARY KEY, time LONG, reported VARCHAR(64), reporter VARCHAR(64), reason INT, url TEXT);");
+        ToxicReport.sql.update("CREATE TABLE IF NOT EXISTS chatlogs(id VARCHAR(64) PRIMARY KEY, name VARCHAR(64), content TEXT);");
 
         ToxicReport.sqlite = new SQL("chatlog", ToxicReport.instance);
         ToxicReport.sqlite.connect();
