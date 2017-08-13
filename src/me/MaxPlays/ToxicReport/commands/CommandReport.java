@@ -97,7 +97,7 @@ public class CommandReport extends Command {
                     try{
                         reason = Integer.valueOf(args[1]);
                     }catch (Exception e){
-                        ToxicReport.sendMessage(p, "Diese ID wurde nicht gefunden");
+                        ToxicReport.sendMessage(p, "Diese Grund-ID wurde nicht gefunden");
                         return;
                     }
                     ReportManager.report(args[0], p, reason);

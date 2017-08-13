@@ -34,7 +34,7 @@ public class ChatlogManager {
                 try {
                     while(rs.next()){
                         JsonObject o = new JsonObject();
-                        o.addProperty("time", new SimpleDateFormat("dd.MM.yyy HH:mm").format(new Date(rs.getLong("time"))));
+                        o.addProperty("time", new SimpleDateFormat("HH:mm").format(new Date(rs.getLong("time"))));
                         o.addProperty("message", rs.getString("message"));
                         array.add(o);
                     }
