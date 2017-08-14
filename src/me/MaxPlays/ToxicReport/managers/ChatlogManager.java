@@ -26,7 +26,7 @@ public class ChatlogManager {
             @Override
             public void run() {
 
-                ResultSet rs = ToxicReport.sql.query("SELECT * FROM chatlog WHERE name='" + p.getName() + "' ORDER BY time DESC;");
+                ResultSet rs = ToxicReport.sql.query("SELECT * FROM chatlog WHERE name='" + p.getName() + "' ORDER BY time ASC;");
 
                 JsonArray array = new JsonArray();
 
