@@ -99,3 +99,13 @@ html {
   bottom: 0;
   left: 0;
 }
+@media (max-width: 769px) {
+  .container{
+    width: 80%;
+  }
+}
+@media (max-width: 426px) {
+  .container{
+    width: 90%;
+  }
+}
