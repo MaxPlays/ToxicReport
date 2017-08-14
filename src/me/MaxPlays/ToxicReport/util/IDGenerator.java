@@ -14,7 +14,7 @@ public class IDGenerator {
         Random r = new Random();
         for(int i = 1; i <= length; i++){
             String c = String.valueOf(chars[r.nextInt(chars.length)]);
-            if(r.nextInt(2) == 1)
+            if(Math.random() > 0.5)
                 c = c.toLowerCase();
             sb.append(c);
         }

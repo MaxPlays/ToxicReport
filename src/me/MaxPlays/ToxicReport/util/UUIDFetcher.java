@@ -4,12 +4,14 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import net.md_5.bungee.BungeeCord;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
@@ -28,6 +30,8 @@ public class UUIDFetcher {
         ConcurrentMap<String, String> map = cache.asMap();
         if(map.containsKey(uuid))
             return map.get(uuid);
+        if(!BungeeCord.getInstance().config.isOnlineMode())
+            return "§4§oERROR";
         try {
             URLConnection conn = new URL("https://api.mojang.com/user/profiles/" + uuid + "/names").openConnection();
             conn.connect();
@@ -38,9 +42,9 @@ public class UUIDFetcher {
             String name = array.get(array.size() - 1).getAsJsonObject().get("name").getAsString();
             cache.put(uuid, name);
             return name;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-                    return "ERROR";
+            return "§4§oERROR";
         }
     }
 }

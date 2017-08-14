@@ -24,10 +24,11 @@ public class ReportManager {
     private static HashMap<String, Long> timeouts = new HashMap<>();
 
     public static void report(String player, ProxiedPlayer reporter, int reason){
-        if(canReport(reporter.getName())){
-            if(BungeeCord.getInstance().getPlayer(player) != null){
+        if(canReport(reporter.getName())) {
+            if(!reporter.getName().equalsIgnoreCase(player)){
+            if (BungeeCord.getInstance().getPlayer(player) != null) {
                 ReportType type = ReportType.getById(reason);
-                if(type != null){
+                if (type != null) {
                     String uuidReported = BungeeCord.getInstance().getPlayer(player).getUniqueId().toString();
                     String uuidReporter = reporter.getUniqueId().toString();
                     String reportID = IDGenerator.getRandomID(10);
@@ -48,8 +49,8 @@ public class ReportManager {
 
                         int online = 0;
 
-                        for(ProxiedPlayer pl: BungeeCord.getInstance().getPlayers()){
-                            if(pl.hasPermission("ToxicReport.supporter")){
+                        for (ProxiedPlayer pl : BungeeCord.getInstance().getPlayers()) {
+                            if (pl.hasPermission("ToxicReport.supporter")) {
                                 ToxicReport.sendMessage(pl, "§4" + BungeeCord.getInstance().getPlayer(player).getName() + " §7wurde wegen §c" + type.getText() + " §7von §8" + reporter.getName() + " §7reportet. ");
                                 TextComponent tc = new TextComponent(ToxicReport.prefix);
                                 TextComponent click = new TextComponent(TextComponent.fromLegacyText("§a[Report übernehmen]"));
@@ -65,16 +66,19 @@ public class ReportManager {
 
                         ToxicReport.sendMessage(reporter, "Vielen Dank für deinen Report des Spielers §c" + player + "§8! §7" +
                                 (online > 0 ? "Es wird sich in Kürze eines der Teammitglieder, die online sind, §8(§2" + online + "§8) §7um die Angelegenheit kümmern." : "Es sind im Moment leider §ckeine §7Teammitglieder online. Es wird sich trotzdem so schnell wie möglich um deinen Report gekümmert.") +
-                                        " §7Die ID dieses Reports lautet §c§l" + reportID);
+                                " §7Die ID dieses Reports lautet §c§l" + reportID);
                         ToxicReport.sendMessage(reporter, "Eine Liste deiner Reports findest du unter §c/report list§7. Dort werden alle §aoffenen §7Reports angezeigt");
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     ToxicReport.sendMessage(reporter, "Die Grund-ID §c" + reason + " §7wurde nicht gefunden. Benutze §c/report " + player + " §7um eine Liste aller IDs zu erhalten");
                 }
-            }else{
+            } else {
                 ToxicReport.sendMessage(reporter, "Der Spieler §c" + player + " §7ist nicht online");
+            }
+        } else {
+                ToxicReport.sendMessage(reporter, "Du kannst dich nicht selbst reporten");
             }
         }else{
             ToxicReport.sendMessage(reporter, "Bitte warte noch §c" + new TimeParser((timeouts.get(reporter.getName()) - System.currentTimeMillis())/1000).parse() + "§7, bevor du wieder einen Spieler meldest");

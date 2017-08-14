@@ -41,7 +41,7 @@ public class CommandReport extends Command {
                         BungeeCord.getInstance().getScheduler().runAsync(ToxicReport.instance, new Runnable() {
                             @Override
                             public void run() {
-                                ResultSet rs = ToxicReport.sql.query("SELECT * FROM reports WHERE reporter='" + p.getUniqueId().toString() + "' ORDER BY time ASC LIMIT 5;");
+                                ResultSet rs = ToxicReport.sql.query("SELECT * FROM reports ORDER BY time ASC LIMIT 5;");
                                 try {
                                     if(rs.next()){
                                         ToxicReport.sendMessage(p, "Offene Reports:");
